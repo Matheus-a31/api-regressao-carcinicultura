@@ -1,0 +1,3 @@
+CAMINHO_MODELOS = "modelos_salvos/"
+RANDOM_STATE = 42
+TEST_SIZE = 0.2
