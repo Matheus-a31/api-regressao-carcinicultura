@@ -41,7 +41,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(
     title="API de Regressão linear - Carcinicultura",
-    description="API preditiva conectada ao PostgreSQL (Neon) para salvar histórico.",
+    description="API preditiva conectada ao PostgreSQL para salvar histórico.",
     lifespan=lifespan
 )
 
