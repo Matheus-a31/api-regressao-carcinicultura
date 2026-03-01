@@ -5,6 +5,7 @@ from typing import List
 import pandas as pd
 import os
 import uuid
+import math
 from contextlib import asynccontextmanager
 
 from utils.persistencia import carregar_modelo, salvar_modelo
@@ -106,11 +107,14 @@ def criar_previsao_gramatura(dados: GramaturaRequest, db: Session = Depends(get_
         id_previsao = str(uuid.uuid4())
         parametros = extrair_dicionario(dados)
         
+        # Converte para float nativo para evitar problemas no banco
+        resultado_estimado_float = float(round(previsao, 2))
+        
         novo_registro = PrevisaoDB(
             id=id_previsao,
             tipo="gramatura",
             parametros_entrada=parametros, 
-            resultado_estimado=round(previsao, 2)
+            resultado_estimado=resultado_estimado_float
         )
         
         db.add(novo_registro)
@@ -154,7 +158,11 @@ def retreinar_gramatura(dados: RetreinarGramaturaRequest):
         salvar_modelo(novo_modelo, caminho_modelo_gramatura)
         modelos['gramatura'] = novo_modelo
         
-        return {"mensagem": "Modelo de gramatura atualizado!", "r2": round(r2, 3), "rmse": round(rmse, 3)}
+        # Trata o erro NaN se enviar poucos dados
+        r2_final = 0.0 if math.isnan(r2) else float(r2)
+        rmse_final = 0.0 if math.isnan(rmse) else float(rmse)
+        
+        return {"mensagem": "Modelo de gramatura atualizado!", "r2": round(r2_final, 3), "rmse": round(rmse_final, 3)}
     except HTTPException:
         raise
     except Exception as e:
@@ -173,11 +181,14 @@ def criar_previsao_racao(dados: RacaoRequest, db: Session = Depends(get_db)):
         id_previsao = str(uuid.uuid4())
         parametros = extrair_dicionario(dados)
         
+        # Converte para float nativo
+        resultado_estimado_float = float(round(dias_restantes, 1))
+        
         novo_registro = PrevisaoDB(
             id=id_previsao,
             tipo="racao",
             parametros_entrada=parametros, 
-            resultado_estimado=round(dias_restantes, 1)
+            resultado_estimado=resultado_estimado_float
         )
         
         db.add(novo_registro)
@@ -221,7 +232,11 @@ def retreinar_racao(dados: RetreinarRacaoRequest):
         salvar_modelo(novo_modelo, caminho_modelo_racao)
         modelos['racao'] = novo_modelo
         
-        return {"mensagem": "Modelo de ração atualizado!", "r2": round(r2, 3), "rmse": round(rmse, 3)}
+        # Trata o erro NaN
+        r2_final = 0.0 if math.isnan(r2) else float(r2)
+        rmse_final = 0.0 if math.isnan(rmse) else float(rmse)
+        
+        return {"mensagem": "Modelo de ração atualizado!", "r2": round(r2_final, 3), "rmse": round(rmse_final, 3)}
     except HTTPException:
         raise
     except Exception as e:
