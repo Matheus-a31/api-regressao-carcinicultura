@@ -7,7 +7,6 @@ from dotenv import load_dotenv
 load_dotenv()
 SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL")
 
-# --- A MÁGICA ACONTECE AQUI ---
 # pool_pre_ping=True: Testa a conexão antes de cada requisição. Se o Neon tiver fechado, ele reconecta.
 # pool_recycle=300: Força a reciclagem da conexão a cada 5 minutos, evitando que ela fique velha.
 engine = create_engine(
