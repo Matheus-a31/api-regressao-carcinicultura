@@ -1,0 +1,200 @@
+{
+	"info": {
+		"name": "API Camarão)",
+		"description": "Testes completos para as rotas separadas de Biomassa, FCA e previsão de Ração.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. Biomassa",
+			"item": [
+				{
+					"name": "Criar Cálculo de Biomassa",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"peso_atual_g\": 12.5,\n  \"densidade\": 80.0,\n  \"area_viveiro\": 10000.0,\n  \"sobrevivencia_est\": 85.0\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8000/calcular/biomassa",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8000",
+							"path": ["calcular", "biomassa"]
+						}
+					}
+				},
+				{
+					"name": "Listar Todas as Biomassas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/calcular/biomassa",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8000",
+							"path": ["calcular", "biomassa"]
+						}
+					}
+				},
+				{
+					"name": "Buscar Biomassa por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/calcular/biomassa/COLE_O_ID_AQUI",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8000",
+							"path": ["calcular", "biomassa", "COLE_O_ID_AQUI"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "2. FCA",
+			"item": [
+				{
+					"name": "Criar Cálculo de FCA",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"peso_atual_g\": 12.5,\n  \"densidade\": 80.0,\n  \"area_viveiro\": 10000.0,\n  \"sobrevivencia_est\": 85.0,\n  \"biomassa_inicial\": 50.0,\n  \"racao_acumulada\": 1500.0\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8000/calcular/fca",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8000",
+							"path": ["calcular", "fca"]
+						}
+					}
+				},
+				{
+					"name": "Listar Todos os FCAs",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/calcular/fca",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8000",
+							"path": ["calcular", "fca"]
+						}
+					}
+				},
+				{
+					"name": "Buscar FCA por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/calcular/fca/COLE_O_ID_AQUI",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8000",
+							"path": ["calcular", "fca", "COLE_O_ID_AQUI"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "3. Ração",
+			"item": [
+				{
+					"name": "Prever Consumo de Ração",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"estoque_atual\": 1500.0,\n  \"dados_futuros\": [\n    {\n      \"dias_cultivo\": 76,\n      \"biomassa\": 6375.0,\n      \"temperatura\": 30.5,\n      \"taxa_arraçoamento\": 0.03\n    },\n    {\n      \"dias_cultivo\": 77,\n      \"biomassa\": 6500.0,\n      \"temperatura\": 30.0,\n      \"taxa_arraçoamento\": 0.028\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8000/prever/racao",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8000",
+							"path": ["prever", "racao"]
+						}
+					}
+				},
+				{
+					"name": "Listar Todas as Previsões de Ração",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/prever/racao",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8000",
+							"path": ["prever", "racao"]
+						}
+					}
+				},
+				{
+					"name": "Buscar Previsão de Ração por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/prever/racao/COLE_O_ID_AQUI",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8000",
+							"path": ["prever", "racao", "COLE_O_ID_AQUI"]
+						}
+					}
+				},
+				{
+					"name": "Retreinar Modelo de Ração",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"historico\": [\n    {\n      \"dias_cultivo\": 60,\n      \"biomassa\": 240.0,\n      \"temperatura\": 31.0,\n      \"taxa_arraçoamento\": 0.08,\n      \"consumo_diario\": 11.5\n    },\n    {\n      \"dias_cultivo\": 61,\n      \"biomassa\": 255.0,\n      \"temperatura\": 30.5,\n      \"taxa_arraçoamento\": 0.075,\n      \"consumo_diario\": 12.0\n    },\n    {\n      \"dias_cultivo\": 62,\n      \"biomassa\": 270.0,\n      \"temperatura\": 30.0,\n      \"taxa_arraçoamento\": 0.07,\n      \"consumo_diario\": 12.5\n    },\n    {\n      \"dias_cultivo\": 63,\n      \"biomassa\": 285.0,\n      \"temperatura\": 29.5,\n      \"taxa_arraçoamento\": 0.065,\n      \"consumo_diario\": 13.0\n    },\n    {\n      \"dias_cultivo\": 64,\n      \"biomassa\": 300.0,\n      \"temperatura\": 29.0,\n      \"taxa_arraçoamento\": 0.06,\n      \"consumo_diario\": 13.5\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8000/retreinar/racao",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8000",
+							"path": ["retreinar", "racao"]
+						}
+					}
+				}
+			]
+		}
+	]
+}
