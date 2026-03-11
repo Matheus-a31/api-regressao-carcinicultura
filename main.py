@@ -41,4 +41,4 @@ app.include_router(racao.router)
 
 @app.get("/", summary="Raiz da API")
 def read_root():
-    return {"mensagem": "API Zootécnica Modular online! Acesse /docs para o Swagger."}
+    return {"mensagem": "API Carcinicultura Acesse /docs para o Swagger."}
