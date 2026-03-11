@@ -2,7 +2,8 @@ numpy
 fastapi
 uvicorn
 pandas
-scikit-learn==1.7.0
+scikit-learn==1.7.07
+scipy>=1.11.0
 joblib
 sqlalchemy
 psycopg2-binary
