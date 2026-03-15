@@ -29,6 +29,14 @@ def treinar_modelo_racao(dados: pd.DataFrame):
 
 
 def prever_dias_restantes_racao(modelo, estoque_atual, dados_futuros):
+    colunas_necessarias = ['dias_cultivo', 'biomassa', 'temperatura', 'taxa_arraçoamento']
+    dados_futuros = dados_futuros[colunas_necessarias]
     consumo_previsto = modelo.predict(dados_futuros)
     consumo_medio = consumo_previsto.mean()
-    return estoque_atual / consumo_medio
+
+    if consumo_medio <= 0:
+        return 0  
+      
+    dias_restantes = estoque_atual / consumo_medio  
+
+    return int(round(dias_restantes))

@@ -13,9 +13,6 @@ from config import CAMINHO_MODELOS
 router = APIRouter(tags=["Consumo de Ração e Estoque"])
 caminho_modelo_racao = os.path.join(CAMINHO_MODELOS, "modelo_racao.pkl")
 
-# ==========================================
-# ROTAS DE PREVISÃO E ESTOQUE DE RAÇÃO
-# ==========================================
 
 @router.post("/prever/racao", summary="Prever consumo e dias de estoque")
 def prever_consumo_racao(dados: RacaoRequest, request: Request, db: Session = Depends(get_db)):
@@ -24,18 +21,34 @@ def prever_consumo_racao(dados: RacaoRequest, request: Request, db: Session = De
         raise HTTPException(status_code=503, detail="Modelo indisponível.")
     
     df_futuro = pd.DataFrame([item.model_dump() for item in dados.dados_futuros])
-    dias_restantes = prever_dias_restantes_racao(modelos['racao'], dados.estoque_atual, df_futuro)
-    consumo_medio_diario = dados.estoque_atual / dias_restantes if dias_restantes > 0 else 0
     
+    try:
+        dias_restantes = prever_dias_restantes_racao(modelos['racao'], dados.estoque_atual, df_futuro)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Erro interno no modelo de previsão: {str(e)}")
+    
+    if math.isnan(dias_restantes) or math.isinf(dias_restantes):
+        dias_restantes = 0.0 
+
+    consumo_medio_diario = dados.estoque_atual / dias_restantes if dias_restantes > 0 else 0.0
+
+    if math.isnan(consumo_medio_diario) or math.isinf(consumo_medio_diario):
+        consumo_medio_diario = 0.0
+
     id_previsao = str(uuid.uuid4())
-    novo_registro = PrevisaoDB(
-        id=id_previsao, 
-        tipo="racao", 
-        parametros_entrada=dados.model_dump(), 
-        resultado_estimado=round(dias_restantes, 1)
-    )
-    db.add(novo_registro)
-    db.commit()
+    
+    try:
+        novo_registro = PrevisaoDB(
+            id=id_previsao, 
+            tipo="racao", 
+            parametros_entrada=dados.model_dump(), 
+            resultado_estimado=round(dias_restantes, 1)
+        )
+        db.add(novo_registro)
+        db.commit()
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=f"Erro ao salvar no banco de dados: {str(e)}")
     
     return {
         "mensagem": "Previsão de estoque calculada!",
@@ -68,10 +81,6 @@ def buscar_previsao_racao(id_previsao: str, db: Session = Depends(get_db)):
         "parametros": registro.parametros_entrada,
         "dias_restantes_estimados": registro.resultado_estimado
     }
-
-# ==========================================
-# ROTA DE RETREINAMENTO DO MODELO (IA)
-# ==========================================
 
 @router.post("/retreinar/racao", summary="Retreinar modelo de ração")
 def retreinar_racao(dados: RetreinarRacaoRequest, request: Request):
