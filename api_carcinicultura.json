@@ -1,12 +1,12 @@
 {
 	"info": {
-		"name": "API Camarão)",
+		"name": "API Carcinicultura",
 		"description": "Testes completos para as rotas separadas de Biomassa, FCA e previsão de Ração.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
-			"name": "1. Biomassa",
+			"name": "Biomassa",
 			"item": [
 				{
 					"name": "Criar Cálculo de Biomassa",
@@ -62,7 +62,7 @@
 			]
 		},
 		{
-			"name": "2. FCA",
+			"name": "FCA",
 			"item": [
 				{
 					"name": "Criar Cálculo de FCA",
@@ -118,7 +118,7 @@
 			]
 		},
 		{
-			"name": "3. Ração",
+			"name": "Ração",
 			"item": [
 				{
 					"name": "Prever Consumo de Ração",
