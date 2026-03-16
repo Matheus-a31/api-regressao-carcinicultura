@@ -8,10 +8,9 @@ from config import TEST_SIZE, RANDOM_STATE
 from utils.validacao import calcular_metricas
 
 def treinar_modelo_gramatura(dados: pd.DataFrame):
-    # Agora a IA olha para TODAS as variáveis de causa
     features = ['dias_cultivo', 'temperatura', 'salinidade', 'densidade', 'sobrevivencia_est', 'racao_acumulada']
     X = dados[features]
-    y = dados['gramatura'] # Efeito (o que queremos prever)
+    y = dados['gramatura'] 
 
     X_treino, X_teste, y_treino, y_teste = train_test_split(
         X, y, test_size=TEST_SIZE, random_state=RANDOM_STATE
